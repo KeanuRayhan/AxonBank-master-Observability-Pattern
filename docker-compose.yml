@@ -29,8 +29,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      rabbitmq: # Assuming rabbitmq also has a healthcheck or starts reliably
-        condition: service_started # or service_healthy if rabbitmq has a healthcheck
+      rabbitmq:
+        condition: service_started
       elasticsearch:
         condition: service_healthy
     environment:
@@ -38,9 +38,9 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
-      # Ensure actuator is exposed for Docker health check
       - management.endpoints.web.exposure.include=health 
-      - management.endpoint.health.show-details=never # Keep details minimal for automated checks
+      - management.endpoint.health.show-details=never
+      - EUREKA_CLIENT_ENABLED=false  # Tambahkan baris ini
     ports:
       - "8080:8080"
     healthcheck:
@@ -48,8 +48,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s # Give some time for the app to start up
-
+      start_period: 60s
   axonbank2:
     image: axonframework/axonbank
     depends_on:
@@ -66,10 +65,11 @@ services:
       - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
       - management.endpoints.web.exposure.include=health
       - management.endpoint.health.show-details=never
+      - EUREKA_CLIENT_ENABLED=false  # Tambahkan baris ini
     ports:
-      - "8081:8080" # Note: internal port is still 8080
+      - "8081:8080"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"] # Internally it's port 8080
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
