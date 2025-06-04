@@ -38,13 +38,15 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
-      - management.endpoints.web.exposure.include=health 
-      - management.endpoint.health.show-details=never
-      - EUREKA_CLIENT_ENABLED=false  # Tambahkan baris ini
+      - management.endpoints.web.exposure.include=health,info
+      - management.endpoint.health.show-details=always
+      - EUREKA_CLIENT_ENABLED=false  
+      - eureka.client.fetchRegistry=false      
+      - eureka.client.registerWithEureka=false 
     ports:
       - "8080:8080"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -66,10 +68,12 @@ services:
       - management.endpoints.web.exposure.include=health
       - management.endpoint.health.show-details=never
       - EUREKA_CLIENT_ENABLED=false  # Tambahkan baris ini
+      - eureka.client.fetchRegistry=false      
+      - eureka.client.registerWithEureka=false 
     ports:
       - "8081:8080"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
