@@ -1,5 +1,7 @@
 package org.axonframework.samples.bank.query.audit;
 
+import java.net.Socket;        // For the Socket class
+import java.io.PrintWriter;   // For the PrintWriter class
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.axonframework.eventhandling.EventHandler;
