@@ -1,7 +1,6 @@
-package org.axonframework.samples.bank.query.audit;
+// package org.axonframework.samples.bank.query.audit;
+package audit;
 
-import java.net.Socket;        // For the Socket class
-import java.io.PrintWriter;   // For the PrintWriter class
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
