@@ -9,23 +9,19 @@ import io.sentry.Sentry;
 public class TestController {
 
     @GetMapping("/test-error")
-    public ResponseEntity<String> testError() {
-        try {
-            throw new Exception("This is a test.");
-        } catch (Exception e) {
-            Sentry.captureException(e);
-            return ResponseEntity.status(500)
-                .body("Error telah dikirim ke Sentry: " + e.getMessage());
-        }
+    public ResponseEntity<String> testError() throws Exception {
+        // Ini akan dilempar dan ditangani otomatis oleh SentryExceptionResolver
+        throw new Exception("This is a test error triggered for Sentry!");
     }
-    
-    @GetMapping("/test-sentry")
-    public ResponseEntity<String> testSentry() {
+
+    @GetMapping("/test-sentry-manual")
+    public ResponseEntity<String> testSentryManual() {
+        // Manual capture, jika ingin mengirim log custom
         try {
-            throw new Exception("Ini adalah error tes untuk Sentry dari TestController!");
+            throw new Exception("Manual capture to Sentry from /test-sentry-manual");
         } catch (Exception e) {
             Sentry.captureException(e);
-            return ResponseEntity.ok("Error berhasil dikirim ke Sentry: " + e.getMessage());
+            return ResponseEntity.ok("Error manual berhasil dikirim ke Sentry: " + e.getMessage());
         }
     }
 }
