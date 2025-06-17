@@ -21,8 +21,17 @@ In order to run the single node version you may execute the following commands:
 The distributed version can be run using the following commands:
 
 * `mvn clean install`
+* `docker build -t axonbank:latest .`
+* `docker compose up -d`
+
+or u can just directly run (slower)
+
+* `mvn clean install`
+* `docker compose up -d`
+
+<!-- * `mvn clean install`
 * `mvn -pl web docker:build`
 * `docker-compose up db` (this will create and initialize the db container, you can stop the container after it has been initialized)
-* `docker-compose up`
+* `docker-compose up` -->
 
 Once all containers are running you can access each instance of Axon Bank by visiting [http://localhost:8080/](http://localhost:8080/) and [http://localhost:8081/](http://localhost:8081/).

@@ -1,6 +1,9 @@
 services:
+
   axonbank1:
-    image: axonframework/axonbank
+    build:
+      context: .
+    image: axonbank:latest
     depends_on:
       db:
         condition: service_healthy
@@ -11,8 +14,11 @@ services:
       - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
     ports:
       - "8080:8080"
+
   axonbank2:
-    image: axonframework/axonbank
+    build:
+      context: .
+    image: axonbank:latest
     depends_on:
       db:
         condition: service_healthy
@@ -23,6 +29,7 @@ services:
       - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
     ports:
       - "8081:8080"
+
   db:
     image: mysql:5.7
     environment:
@@ -34,8 +41,15 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
+    volumes:
+      - db_data:/var/lib/mysql
+
   rabbitmq:
     build: docker/rabbitmq/
+    depends_on:
+      db:
+        condition: service_healthy
+
   elasticsearch:
     image: elasticsearch:2.4.6
     environment:
@@ -49,6 +63,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    depends_on:
+      db:
+        condition: service_healthy
+      
   kibana:
     image: kibana:4.6.6
     environment:
@@ -57,6 +75,8 @@ services:
       - "5601:5601"
     depends_on:
       - elasticsearch
+      - db
+
   logstash:
     image: docker.elastic.co/logstash/logstash:6.8.23
     volumes:
@@ -68,3 +88,7 @@ services:
       - "9600:9600"      # Monitoring API Logstash
     depends_on:
       - elasticsearch
+      - db
+
+volumes:
+  db_data:
