@@ -1,4 +1,5 @@
 FROM eclipse-temurin:8 AS runtime
+#tezt
 
 COPY /web/target/axon-bank-web-0.0.1-SNAPSHOT.jar axon-bank-web-0.0.1-SNAPSHOT.jar
 
